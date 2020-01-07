@@ -7,6 +7,21 @@ type Beer struct {
 	Type BeerType `json:"type"`
 	Style BeerStyle `json:"style"`
 }
+
+/*
+o comando usado para criar o banco de dados foi:
+
+CREATE TABLE beer (
+   id INTEGER PRIMARY KEY AUTOINCREMENT,
+   name text NOT NULL,
+   type integer NOT NULL,
+   style integer not null
+);
+
+Considerei que a criação do banco estava fora do escopo do aplicativo
+sendo criado por um(a) analista/DBA
+*/
+
 //https://www.thebeerstore.ca/beer-101/beer-types/
 type BeerType int
 
