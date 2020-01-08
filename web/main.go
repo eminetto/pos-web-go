@@ -37,7 +37,6 @@ func main() {
 		ReadTimeout:  30 * time.Second,
 		WriteTimeout: 30 * time.Second,
 		Addr:         ":4000",
-		//Handler:      mux,
 		Handler:      http.DefaultServeMux,
 		ErrorLog:     logger,
 	}
