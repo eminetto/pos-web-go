@@ -2,15 +2,15 @@ package main
 
 import (
 	"database/sql"
-	"fmt"
 	"github.com/codegangsta/negroni"
 	"github.com/eminetto/pos-web-go/core/beer"
-	"log"
+	"github.com/eminetto/pos-web-go/web/handlers"
+	"github.com/gorilla/mux"
 	_ "github.com/mattn/go-sqlite3"
+	"log"
 	"net/http"
 	"os"
 	"time"
-	"github.com/gorilla/mux"
 )
 
 func main() {
@@ -20,16 +20,15 @@ func main() {
 	}
 	defer db.Close()
 	service := beer.NewService(db)
-	/*mux := http.NewServeMux()
-	mux.Handle("/", hello(service))*/
 	r := mux.NewRouter()
-	//handlers
+	//middlewares - código que vai ser executado em todas as requests
+	//aqui podemos colocar logs, inclusão e validação de cabeçalhos, etc
 	n := negroni.New(
 		negroni.NewLogger(),
 	)
-	r.Handle("/v1/beer", n.With(
-		negroni.Wrap(hello(service)),
-	)).Methods("GET", "OPTIONS")
+	//handlers
+	handlers.MakeBeerHandlers(r, n, service)
+
 	http.Handle("/", r)
 
 	logger := log.New(os.Stderr, "logger: ", log.Lshortfile)
@@ -45,11 +44,4 @@ func main() {
 		log.Fatal(err)
 	}
 
-}
-
-func hello(service *beer.Service) http.Handler {
-	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		all, _ := service.GetAll()
-		fmt.Println(all)
-	})
 }
