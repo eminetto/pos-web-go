@@ -29,7 +29,18 @@ func main() {
 	//handlers
 	handlers.MakeBeerHandlers(r, n, service)
 
+	//static files
+	fileServer := http.FileServer(http.Dir("./web/static"))
+	r.PathPrefix("/static/").Handler(n.With(
+		negroni.Wrap(http.StripPrefix("/static/", fileServer)),
+	)).Methods("GET", "OPTIONS")
+
 	http.Handle("/", r)
+
+	//usado para testes de performance do servidor usando o siege
+	r.HandleFunc("/ping", func(w http.ResponseWriter, r *http.Request) {
+		w.WriteHeader(http.StatusOK)
+	})
 
 	logger := log.New(os.Stderr, "logger: ", log.Lshortfile)
 	srv := &http.Server{
