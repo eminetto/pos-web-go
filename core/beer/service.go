@@ -6,7 +6,7 @@ type UseCase interface {
 	Get(ID int64) (*Beer, error)
 	Store(b *Beer) error
 	Update(b *Beer) error
-	Remove(ID int) error
+	Remove(ID int64) error
 }
 
 //em Go qualquer coisa que implemente as funções de uma interface
