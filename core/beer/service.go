@@ -25,7 +25,7 @@ func (s *Service) GetAll() ([]*Beer, error) {
 	return nil, nil
 }
 
-func (s *Service) Get(ID int) (*Beer, error) {
+func (s *Service) Get(ID int64) (*Beer, error) {
 	return nil, nil
 }
 func (s *Service) Store(b *Beer) error {
@@ -34,6 +34,6 @@ func (s *Service) Store(b *Beer) error {
 func (s *Service) Update(b *Beer) error {
 	return nil
 }
-func (s *Service) Remove(ID int) error {
+func (s *Service) Remove(ID int64) error {
 	return nil
 }
