@@ -20,8 +20,6 @@ func main() {
 	}
 	defer db.Close()
 	service := beer.NewService(db)
-	/*mux := http.NewServeMux()
-	mux.Handle("/", hello(service))*/
 	r := mux.NewRouter()
 	//handlers
 	n := negroni.New(
