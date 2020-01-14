@@ -3,7 +3,7 @@ package beer
 //define a interface com as funções que serão usadas pelo restante do projeto
 type UseCase interface {
 	GetAll() ([]*Beer, error)
-	Get(ID int) (*Beer, error)
+	Get(ID int64) (*Beer, error)
 	Store(b *Beer) error
 	Update(b *Beer) error
 	Remove(ID int) error
