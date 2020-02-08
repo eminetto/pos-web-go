@@ -3,6 +3,8 @@ package beer
 import (
 	"database/sql"
 	"fmt"
+
+	_ "github.com/mattn/go-sqlite3"
 )
 
 //vamos agora usar o banco de dados SQLite
@@ -16,7 +18,6 @@ import (
 //com isso vai ser feito o download do pacote e atualizados os arquivos
 //go.mod e go.sum com as dependências
 
-
 //define a interface com as funções que serão usadas pelo restante do projeto
 type UseCase interface {
 	GetAll() ([]*Beer, error)
@@ -27,7 +28,7 @@ type UseCase interface {
 }
 
 //a struct Service agora tem uma conexão com o banco de dados dentro dela
-type Service struct{
+type Service struct {
 	DB *sql.DB
 }
 
@@ -89,13 +90,13 @@ func (s *Service) Store(b *Beer) error {
 	if err != nil {
 		return err
 	}
-	stmt, err := tx.Prepare("insert into beer(name, type, style) values (?,?,?)")
+	stmt, err := tx.Prepare("insert into beer(id, name, type, style) values (?,?,?,?)")
 	if err != nil {
 		return err
 	}
 	defer stmt.Close()
 	//o comando Exec retorna um Result, mas não temos interesse nele, por isso podemos ignorá-lo com o _
-	_, err = stmt.Exec(b.Name, b.Type, b.Style)
+	_, err = stmt.Exec(b.ID, b.Name, b.Type, b.Style)
 	if err != nil {
 		tx.Rollback()
 		return err
