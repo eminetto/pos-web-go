@@ -33,3 +33,5 @@ func TestStore(t *testing.T) {
 		t.Fatalf("Dados inválidos. Esperado %d, recebido %d", 1, saved.ID)
 	}
 }
+
+//@todo implementar testes para as outras funções
