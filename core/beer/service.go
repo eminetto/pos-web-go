@@ -89,13 +89,13 @@ func (s *Service) Store(b *Beer) error {
 	if err != nil {
 		return err
 	}
-	stmt, err := tx.Prepare("insert into beer(name, type, style) values (?,?,?)")
+	stmt, err := tx.Prepare("insert into beer(id, name, type, style) values (?,?,?,?)")
 	if err != nil {
 		return err
 	}
 	defer stmt.Close()
 	//o comando Exec retorna um Result, mas não temos interesse nele, por isso podemos ignorá-lo com o _
-	_, err = stmt.Exec(b.Name, b.Type, b.Style)
+	_, err = stmt.Exec(b.ID, b.Name, b.Type, b.Style)
 	if err != nil {
 		tx.Rollback()
 		return err
