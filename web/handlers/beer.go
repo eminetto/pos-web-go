@@ -2,11 +2,12 @@ package handlers
 
 import (
 	"encoding/json"
+	"net/http"
+	"strconv"
+
 	"github.com/codegangsta/negroni"
 	"github.com/eminetto/pos-web-go/core/beer"
 	"github.com/gorilla/mux"
-	"net/http"
-	"strconv"
 )
 
 //a função recebe como terceiro parâmetro a interface
@@ -62,7 +63,7 @@ func getAllBeer(service beer.UseCase) http.Handler {
 /*
 Para testar:
 curl http://localhost:4000/v1/beer/1
- */
+*/
 func getBeer(service beer.UseCase) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		//@TODO este código está duplicado em todos os handlers. Pergunta: como podemos melhorar isso?
@@ -96,15 +97,16 @@ func getBeer(service beer.UseCase) http.Handler {
 
 /*
 Para testar:
-curl -X "POST" "http://localhost:4000/v1/beer" \
+curl -v -X "POST" "http://localhost:4000/v1/beer" \
      -H 'Accept: application/json' \
      -H 'Content-Type: application/json' \
      -d $'{
+  "id": 6,
   "name": "Skol",
   "type": 1,
   "style":2
 }'
- */
+*/
 func storeBeer(service beer.UseCase) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		//@TODO este código está duplicado em todos os handlers. Pergunta: como podemos melhorar isso?
