@@ -1,5 +1,5 @@
 module github.com/eminetto/pos-web-go
 
-go 1.13
+go 1.15
 
-require github.com/mattn/go-sqlite3 v2.0.2+incompatible
+require github.com/mattn/go-sqlite3 v1.14.6
