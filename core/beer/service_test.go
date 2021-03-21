@@ -19,6 +19,10 @@ func TestStore(t *testing.T) {
 	if err != nil {
 		t.Fatalf("Erro conectando ao banco de dados %s", err.Error())
 	}
+	err = clearDB(db)
+	if err != nil {
+		t.Fatalf("Erro limpando o banco de dados: %s", err.Error())
+	}
 	defer db.Close()
 	service := beer.NewService(db)
 	err = service.Store(b)
@@ -32,6 +36,16 @@ func TestStore(t *testing.T) {
 	if saved.ID != 1 {
 		t.Fatalf("Dados inválidos. Esperado %d, recebido %d", 1, saved.ID)
 	}
+}
+
+func clearDB(db *sql.DB) error {
+	tx, err := db.Begin()
+	if err != nil {
+		return err
+	}
+	_, err = tx.Exec("delete from beer")
+	tx.Commit()
+	return err
 }
 
 //@todo implementar testes para as outras funções
