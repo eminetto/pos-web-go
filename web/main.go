@@ -31,13 +31,12 @@ func main() {
 	)).Methods("GET", "OPTIONS")
 	http.Handle("/", r)
 
-	logger := log.New(os.Stderr, "logger: ", log.Lshortfile)
 	srv := &http.Server{
 		ReadTimeout:  30 * time.Second,
 		WriteTimeout: 30 * time.Second,
 		Addr:         ":4000",
 		Handler:      http.DefaultServeMux,
-		ErrorLog:     logger,
+		ErrorLog:     log.New(os.Stderr, "logger: ", log.Lshortfile),
 	}
 	err = srv.ListenAndServe()
 	if err != nil {
@@ -48,10 +47,9 @@ func main() {
 
 func hello(service beer.UseCase) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		all, _ := service.GetAll()
-		for _, i := range all {
-			fmt.Println(i)
+		books, _ := service.GetAll()
+		for _, b := range books {
+			fmt.Println(b)
 		}
-
 	})
 }
