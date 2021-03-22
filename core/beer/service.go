@@ -3,6 +3,8 @@ package beer
 import (
 	"database/sql"
 	"fmt"
+
+	_ "github.com/mattn/go-sqlite3"
 )
 
 //vamos agora usar o banco de dados SQLite
