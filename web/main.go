@@ -3,14 +3,15 @@ package main
 import (
 	"database/sql"
 	"fmt"
-	"github.com/codegangsta/negroni"
-	"github.com/eminetto/pos-web-go/core/beer"
 	"log"
-	_ "github.com/mattn/go-sqlite3"
 	"net/http"
 	"os"
 	"time"
+
+	"github.com/codegangsta/negroni"
+	"github.com/eminetto/pos-web-go/core/beer"
 	"github.com/gorilla/mux"
+	_ "github.com/mattn/go-sqlite3"
 )
 
 func main() {
@@ -45,9 +46,12 @@ func main() {
 
 }
 
-func hello(service *beer.Service) http.Handler {
+func hello(service beer.UseCase) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		all, _ := service.GetAll()
-		fmt.Println(all)
+		for _, i := range all {
+			fmt.Println(i)
+		}
+
 	})
 }
