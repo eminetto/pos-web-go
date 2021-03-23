@@ -1,0 +1,36 @@
+{{define "index"}}
+    {{template "header" .}}
+    <div class="container">
+        <h1>Beers</h1>
+
+        {{ with .Beers }}
+            <table class="table">
+                <thead>
+                <tr>
+                    <th scope="col">#</th>
+                    <th scope="col">Nome</th>
+                    <th scope="col">Tipo</th>
+                    <th scope="col">Estilo</th>
+                </tr>
+                </thead>
+                <tbody>
+
+                {{ range . }}
+                    <tr>
+                        <th scope="row">{{.ID}}</th>
+                        <td>{{.Name}}</td>
+                        <td>{{.Type}}</td>
+                        <td>{{.Style}}</td>
+                    </tr>
+                {{end}}
+
+                </tbody>
+            </table>
+        {{else}}
+            <div class="alert alert-primary" role="alert">
+                Não existem cervejas cadastradas
+            </div>
+        {{end}}
+    </div>
+    {{template "footer" .}}
+{{end}}

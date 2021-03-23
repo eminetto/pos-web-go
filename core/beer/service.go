@@ -3,6 +3,8 @@ package beer
 import (
 	"database/sql"
 	"fmt"
+
+	_ "github.com/mattn/go-sqlite3"
 )
 
 //vamos agora usar o banco de dados SQLite
@@ -16,7 +18,6 @@ import (
 //com isso vai ser feito o download do pacote e atualizados os arquivos
 //go.mod e go.sum com as dependências
 
-
 //define a interface com as funções que serão usadas pelo restante do projeto
 type UseCase interface {
 	GetAll() ([]*Beer, error)
@@ -27,7 +28,7 @@ type UseCase interface {
 }
 
 //a struct Service agora tem uma conexão com o banco de dados dentro dela
-type Service struct{
+type Service struct {
 	DB *sql.DB
 }
 

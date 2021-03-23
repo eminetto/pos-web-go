@@ -2,15 +2,16 @@ package main
 
 import (
 	"database/sql"
+	"log"
+	"net/http"
+	"os"
+	"time"
+
 	"github.com/codegangsta/negroni"
 	"github.com/eminetto/pos-web-go/core/beer"
 	"github.com/eminetto/pos-web-go/web/handlers"
 	"github.com/gorilla/mux"
 	_ "github.com/mattn/go-sqlite3"
-	"log"
-	"net/http"
-	"os"
-	"time"
 )
 
 func main() {
@@ -29,15 +30,20 @@ func main() {
 	//handlers
 	handlers.MakeBeerHandlers(r, n, service)
 
+	//static files
+	fileServer := http.FileServer(http.Dir("./web/static"))
+	r.PathPrefix("/static/").Handler(n.With(
+		negroni.Wrap(http.StripPrefix("/static/", fileServer)),
+	)).Methods("GET", "OPTIONS")
+
 	http.Handle("/", r)
 
-	logger := log.New(os.Stderr, "logger: ", log.Lshortfile)
 	srv := &http.Server{
 		ReadTimeout:  30 * time.Second,
 		WriteTimeout: 30 * time.Second,
 		Addr:         ":4000",
 		Handler:      http.DefaultServeMux,
-		ErrorLog:     logger,
+		ErrorLog:     log.New(os.Stderr, "logger: ", log.Lshortfile),
 	}
 	err = srv.ListenAndServe()
 	if err != nil {

@@ -2,9 +2,9 @@ package beer
 
 //as tags json definem como os dados vão ser transformados em JSON
 type Beer struct {
-	ID int64 `json:"id"`
-	Name string `json:"name"`
-	Type BeerType `json:"type"`
+	ID    int64     `json:"id"`
+	Name  string    `json:"name"`
+	Type  BeerType  `json:"type"`
 	Style BeerStyle `json:"style"`
 }
 
@@ -26,9 +26,9 @@ sendo criado por um(a) analista/DBA
 type BeerType int
 
 const (
-	TypeAle = 1
+	TypeAle   = 1
 	TypeLager = 2
-	TypeMalt = 3
+	TypeMalt  = 3
 	TypeStout = 4
 )
 
