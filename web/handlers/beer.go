@@ -87,15 +87,15 @@ func getAllBeerJSON(w http.ResponseWriter, service beer.UseCase) {
 	w.Header().Set("Content-Type", "application/json")
 	all, err := service.GetAll()
 	if err != nil {
-		w.Write(formatJSONError(err.Error()))
 		w.WriteHeader(http.StatusInternalServerError)
+		w.Write(formatJSONError(err.Error()))
 		return
 	}
 	//vamos converter o resultado em JSON e gerar a resposta
 	err = json.NewEncoder(w).Encode(all)
 	if err != nil {
-		w.Write(formatJSONError("Erro convertendo em JSON"))
 		w.WriteHeader(http.StatusInternalServerError)
+		w.Write(formatJSONError("Erro convertendo em JSON"))
 		return
 	}
 }
