@@ -31,7 +31,8 @@ func Test_getAllBeer(t *testing.T) {
 	assert.Nil(t, clearDB(db))
 	service := beer.NewService(db)
 	assert.Nil(t, service.Store(b1))
-	_ = service.Store(b2)
+	assert.Nil(t, service.Store(b2))
+
 	handler := getAllBeer(service)
 	r := mux.NewRouter()
 	r.Handle("/v1/beer", handler)
@@ -71,7 +72,7 @@ func (t BeerServiceMock) GetAll() ([]*beer.Beer, error) {
 
 func (t BeerServiceMock) Get(ID int64) (*beer.Beer, error) {
 	b1 := &beer.Beer{
-		ID:    10,
+		ID:    ID,
 		Name:  "Heineken",
 		Type:  beer.TypeLager,
 		Style: beer.StylePale,
@@ -104,7 +105,6 @@ func Test_getAllBeerWithMock(t *testing.T) {
 	r.ServeHTTP(rr, req)
 	assert.Equal(t, http.StatusOK, rr.Code)
 
-
 	var result []*beer.Beer
 	err = json.NewDecoder(rr.Body).Decode(&result)
 	assert.Nil(t, err)
@@ -126,7 +126,7 @@ func Test_getBeerWithMock(t *testing.T) {
 	rr := httptest.NewRecorder()
 	r.ServeHTTP(rr, req)
 	assert.Equal(t, http.StatusOK, rr.Code)
-	
+
 	var result *beer.Beer
 	err = json.NewDecoder(rr.Body).Decode(&result)
 	assert.Nil(t, err)
