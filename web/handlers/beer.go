@@ -2,6 +2,8 @@ package handlers
 
 import (
 	"encoding/json"
+
+	"html/template"
 	"net/http"
 	"strconv"
 
@@ -38,26 +40,64 @@ func MakeBeerHandlers(r *mux.Router, n *negroni.Negroni, service beer.UseCase) {
 
 /*
 Para testar:
-curl http://localhost:4000/v1/beer
+curl -H 'Accept: application/json' http://localhost:4000/v1/beer
 */
 func getAllBeer(service beer.UseCase) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		//@TODO este código está duplicado em todos os handlers. Pergunta: como podemos melhorar isso?
-		w.Header().Set("Content-Type", "application/json")
-		all, err := service.GetAll()
-		if err != nil {
-			w.WriteHeader(http.StatusInternalServerError)
-			w.Write(formatJSONError(err.Error()))
-			return
+		//analisa o que o usuário requisitou via headers
+		switch r.Header.Get("Accept") {
+		case "application/json":
+			getAllBeerJSON(w, service)
+		default:
+			getAllBeerHTML(w, service)
 		}
-		//vamos converter o resultado em JSON e gerar a resposta
-		err = json.NewEncoder(w).Encode(all)
-		if err != nil {
-			w.WriteHeader(http.StatusInternalServerError)
-			w.Write(formatJSONError("Erro convertendo em JSON"))
-			return
-		}
+
 	})
+}
+
+func getAllBeerHTML(w http.ResponseWriter, service beer.UseCase) {
+	w.Header().Set("Content-Type", "text/html")
+	ts, err := template.ParseFiles(
+		"./web/templates/header.html",
+		"./web/templates/index.html",
+		"./web/templates/footer.html")
+	if err != nil {
+		http.Error(w, "Error parsing "+err.Error(), http.StatusInternalServerError)
+		return
+	}
+	all, err := service.GetAll()
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	data := struct {
+		Title string
+		Beers []*beer.Beer
+	}{
+		Title: "Beers",
+		Beers: all,
+	}
+	err = ts.Lookup("index.html").ExecuteTemplate(w, "index", data)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+	}
+}
+
+func getAllBeerJSON(w http.ResponseWriter, service beer.UseCase) {
+	w.Header().Set("Content-Type", "application/json")
+	all, err := service.GetAll()
+	if err != nil {
+		w.WriteHeader(http.StatusInternalServerError)
+		w.Write(formatJSONError(err.Error()))
+		return
+	}
+	//vamos converter o resultado em JSON e gerar a resposta
+	err = json.NewEncoder(w).Encode(all)
+	if err != nil {
+		w.WriteHeader(http.StatusInternalServerError)
+		w.Write(formatJSONError("Erro convertendo em JSON"))
+		return
+	}
 }
 
 /*
