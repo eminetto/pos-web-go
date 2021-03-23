@@ -2,15 +2,16 @@ package main
 
 import (
 	"database/sql"
+	"log"
+	"net/http"
+	"os"
+	"time"
+
 	"github.com/codegangsta/negroni"
 	"github.com/eminetto/pos-web-go/core/beer"
 	"github.com/eminetto/pos-web-go/web/handlers"
 	"github.com/gorilla/mux"
 	_ "github.com/mattn/go-sqlite3"
-	"log"
-	"net/http"
-	"os"
-	"time"
 )
 
 func main() {
@@ -37,18 +38,12 @@ func main() {
 
 	http.Handle("/", r)
 
-	//usado para testes de performance do servidor usando o siege
-	r.HandleFunc("/ping", func(w http.ResponseWriter, r *http.Request) {
-		w.WriteHeader(http.StatusOK)
-	})
-
-	logger := log.New(os.Stderr, "logger: ", log.Lshortfile)
 	srv := &http.Server{
 		ReadTimeout:  30 * time.Second,
 		WriteTimeout: 30 * time.Second,
 		Addr:         ":4000",
 		Handler:      http.DefaultServeMux,
-		ErrorLog:     logger,
+		ErrorLog:     log.New(os.Stderr, "logger: ", log.Lshortfile),
 	}
 	err = srv.ListenAndServe()
 	if err != nil {
