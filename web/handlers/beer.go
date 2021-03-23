@@ -40,7 +40,7 @@ func MakeBeerHandlers(r *mux.Router, n *negroni.Negroni, service beer.UseCase) {
 
 /*
 Para testar:
-curl http://localhost:4000/v1/beer
+curl -H 'Accept: application/json' http://localhost:4000/v1/beer
 */
 func getAllBeer(service beer.UseCase) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
