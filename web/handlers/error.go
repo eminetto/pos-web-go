@@ -1,6 +1,8 @@
 package handlers
 
-import "encoding/json"
+import (
+	"encoding/json"
+)
 
 //esta função gera um erro no formato esperado
 //pelo http.ResponseWriter e em um formato
@@ -8,7 +10,7 @@ import "encoding/json"
 func formatJSONError(message string) []byte {
 	appError := struct {
 		Message string `json:"message"`
-	} {
+	}{
 		message,
 	}
 	response, err := json.Marshal(appError)
