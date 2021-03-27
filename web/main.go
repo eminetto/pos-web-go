@@ -41,7 +41,7 @@ func main() {
 	srv := &http.Server{
 		ReadTimeout:  30 * time.Second,
 		WriteTimeout: 30 * time.Second,
-		Addr:         ":4000",
+		Addr:         ":" + os.Getenv("HTTP_PORT"),
 		Handler:      http.DefaultServeMux,
 		ErrorLog:     log.New(os.Stderr, "logger: ", log.Lshortfile),
 	}
