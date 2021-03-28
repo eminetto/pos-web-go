@@ -36,6 +36,10 @@ func main() {
 		negroni.Wrap(http.StripPrefix("/static/", fileServer)),
 	)).Methods("GET", "OPTIONS")
 
+	r.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
+		// used to health check, will return 200
+	})
+
 	http.Handle("/", r)
 
 	srv := &http.Server{
