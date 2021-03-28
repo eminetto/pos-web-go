@@ -19,11 +19,11 @@ func TestStore(t *testing.T) {
 	if err != nil {
 		t.Fatalf("Erro conectando ao banco de dados %s", err.Error())
 	}
+	defer db.Close()
 	err = clearDB(db)
 	if err != nil {
 		t.Fatalf("Erro limpando o banco de dados: %s", err.Error())
 	}
-	defer db.Close()
 	service := beer.NewService(db)
 	err = service.Store(b)
 	if err != nil {
