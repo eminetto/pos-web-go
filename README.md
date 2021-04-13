@@ -1,2 +1,2 @@
 # pos-web-go
-Conteúdo da disciplina Desenvolvimento Web Com Go
+Conteúdo da disciplina e curso Desenvolvimento Web Com Go

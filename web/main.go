@@ -36,12 +36,16 @@ func main() {
 		negroni.Wrap(http.StripPrefix("/static/", fileServer)),
 	)).Methods("GET", "OPTIONS")
 
+	r.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
+		// used to health check, will return 200
+	})
+
 	http.Handle("/", r)
 
 	srv := &http.Server{
 		ReadTimeout:  30 * time.Second,
 		WriteTimeout: 30 * time.Second,
-		Addr:         ":4000",
+		Addr:         ":" + os.Getenv("HTTP_PORT"),
 		Handler:      http.DefaultServeMux,
 		ErrorLog:     log.New(os.Stderr, "logger: ", log.Lshortfile),
 	}
